@@ -8,6 +8,7 @@
 ######  ..> If not consistency....
 
 #TBD:
+## Trazar flowchart
 ## Comentar bien punto2
 ## Generar Disorder
 ## Ver como solventar disorder (probablemente reconvertir con {cmd+calibre})
@@ -18,6 +19,7 @@ import struc_checking
 import os
 import shutil
 import subprocess
+import openpyxl
 
 main_root = os.path.dirname(__file__)
 input_root = f'{main_root}\\Input'
@@ -28,7 +30,7 @@ disorder_root = f'{main_root}\\Disorder'
 input_formats = ["pdf","epub"]      #solo ten que aver un formato de input
 output_formats= ["azw3"]      #teñen que cumplirse todos os de saída
 
-
+books_register = {}
 
 # Abre la consola de PowerShell
 
@@ -38,24 +40,30 @@ def env_cmd_pwsh(comando):
     # proceso.communicate()
 
 
-for root, dirs, files in os.walk(input_root, topdown=True):             #primer paseo: mover file a output_root//disorder_root
+for root, dirs, files in os.walk(input_root, topdown=False):             #primer paseo: mover file a output_root//disorder_root
     for direc in dirs:
         metadata, consistency, target_files= struc_checking.file_checker(files, root, input_formats, output_formats,)
 
         if consistency:
             aim_route= f'{output_root}\\{metadata["autor"]}\\{metadata["titulo"]}'
-            for target in target_files:  
-                try:                                                    #si existe el directorio copia aqui     
-                    shutil.copy(root+"\\"+target, aim_route+"\\"+target)
-                except FileNotFoundError:                               #sino crea el directorio y pega
-                    os.makedirs(os.path.dirname( aim_route+"\\"+target), exist_ok=True)
-                    if ".ods" in target: shutil.copy(root+"\\"+target,aim_route+"\\"+metadata["titulo"+".ods"])
-                    else: shutil.copy(root+"\\"+target,aim_route+"\\"+target)
-                    #               output_root+"\\"+"\\".join(root.split("\\")[-2:]))
-            cd_command= f"cd '{aim_route}'"
-            #para saber mais sobre o seguinte comando:  https://manual.calibre-ebook.com/generated/en/ebook-meta.html
-            get_cover_command= f"ebook-meta '{target_files[2]}' --get-cover '{target_files[2].split(".")[0]}.jpg'"         
-            env_cmd_pwsh(cd_command+ ";" +get_cover_command)
+           
+            if books_register.get(metadata["autor"]):
+                books_register[metadata["autor"]].append(metadata["titulo"])
+            else: 
+                books_register[metadata["autor"]] = [metadata["titulo"]]
+
+                # for target in target_files:  
+                #     try:                                                    #si existe el directorio copia aqui     
+                #         shutil.copy(root+"\\"+target, aim_route+"\\"+target)
+                #     except FileNotFoundError:                               #sino crea el directorio y pega
+                #         os.makedirs(os.path.dirname( aim_route+"\\"+target), exist_ok=True)
+                #         if ".ods" in target: shutil.copy(root+"\\"+target,aim_route+"\\"+metadata["titulo"+".ods"])
+                #         else: shutil.copy(root+"\\"+target,aim_route+"\\"+target)
+                #         #               output_root+"\\"+"\\".join(root.split("\\")[-2:]))
+                # cd_command= f"cd '{aim_route}'"
+                # #para saber mais sobre o seguinte comando:  https://manual.calibre-ebook.com/generated/en/ebook-meta.html
+                # get_cover_command= f"ebook-meta '{target_files[2]}' --get-cover '{target_files[2].split(".")[0]}.jpg'"         
+                # env_cmd_pwsh(cd_command+ ";" +get_cover_command)
 
             a=0
 
@@ -77,7 +85,20 @@ for root, dirs, files in os.walk(input_root, topdown=True):             #primer 
 #             os.rmdir(path)
 
 
+a=0
+ 
 
+wb = openpyxl.load_workbook(filename = 'rexistro_libros.xlsx')
+wba = wb.active
+row_numb=1
+for autor in books_register: 
+    books_register[autor]   = set(books_register[autor] ) 
+    for titulo in books_register[autor]:
+        row_numb+=1
+        wba[f'B{row_numb}'].value = autor
+        wba[f'C{row_numb}'].value = titulo
+        a=0
+wb.save(filename = 'rexistro_libros.xlsx')
 
 
 
