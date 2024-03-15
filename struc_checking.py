@@ -8,9 +8,9 @@ def file_checker(files: list[str], dir: str,
     ''' 
     file_checker comproba que a estrutura é solida:
 
-        1) metadata.opf Existe   --> extraemos titulo  
-        2) existe un ficheiro que compre input_formats   --> file_flags[inputOK] = True
-        3) existe un ficheiro que compre output_formats   --> file_flags[inputOK] = True
+    1) metadata.opf Existe   --> extraemos titulo  
+    2) existe un ficheiro que compre input_formats   --> file_flags[inputOK] = True
+    3) existe un ficheiro que compre output_formats   --> file_flags[inputOK] = True
     '''
 
     def eliminar_tildes(s):
