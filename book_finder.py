@@ -88,17 +88,6 @@ for root, dirs, files in os.walk(input_root, topdown=False):             #primer
 a=0
  
 
-wb = openpyxl.load_workbook(filename = 'rexistro_libros.xlsx')
-wba = wb.active
-row_numb=1
-for autor in books_register: 
-    books_register[autor]   = set(books_register[autor] ) 
-    for titulo in books_register[autor]:
-        row_numb+=1
-        wba[f'B{row_numb}'].value = autor
-        wba[f'C{row_numb}'].value = titulo
-        a=0
-wb.save(filename = 'rexistro_libros.xlsx')
 
 
 

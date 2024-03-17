@@ -4,39 +4,59 @@ import string
 
 wb = openpyxl.load_workbook(filename = 'rexistro_libros.xlsx')
 wba = wb.active
-row_numb = 1
+
 ebook_library = {}
 categories = []
+
 
 def get_row(row:int, init:bool = False):#->str,dict:
     if init:
         for let in string.ascii_uppercase[2:]:
-            tag = wba[f'{let}{row_numb}'].value
+            tag = wba[f'{let}{row}'].value
             if not tag: break
-            categories.append((let,wba[f'{let}{row_numb}'].value))
+            categories.append((let,wba[f'{let}{row}'].value))
         return None #{cat: [] for cat in categories}
     
     else:
-        autor = wba[f'B{row_numb}'].value
-        info = {tag: wba[f'{let}{row_numb}'].value for let,tag in categories}
+        autor = wba[f'B{row}'].value
+        info = {tag: [wba[f'{let}{row}'].value] for let,tag in categories}
         return autor, info
 
 
 
-get_row(row_numb, True)
-autor = True
-# ebook_library[""] = wba[f'B{row_numb}'].value, wba[f'C{row_numb}'].value
-while autor:
-    row_numb+=1
-    autor,info = get_row(row_numb)
-    a=0
-    if not ebook_library.get(autor): 
-        pass# TBD ebook_library[autor] = [titulo]
-    else:
-        pass# TBD   ebook_library[autor].append(titulo) 
-
+def read_library_database(wb):
+    ## This function reads, the excel lirary, and build a dictionary
+    ## with structured data of excel content
     
+    row_numb = 1
+    get_row(row_numb, True)
+    autor = True
 
-for key in ebook_library:
-    print(f'{key}:  {ebook_library[key]}')
+    while autor:
+        row_numb+=1
+        autor,info = get_row(row_numb)
+        if not ebook_library.get(autor): 
+            ebook_library[autor] = info
+        else:
+            for field in info:
+                ebook_library[autor][field].append(info[field][0])
 
+
+    for key in ebook_library:
+        print(f'{key}:  {ebook_library[key]}')
+
+    return ebook_library, categories
+
+
+
+def write_excel_database(wb, books_register):
+
+    row_numb=1
+    for autor in books_register: 
+        books_register[autor]   = set(books_register[autor] ) 
+        for titulo in books_register[autor]:
+            row_numb+=1
+            wba[f'B{row_numb}'].value = autor
+            wba[f'C{row_numb}'].value = titulo
+            a=0
+    wb.save(filename = 'rexistro_libros.xlsx')
