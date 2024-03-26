@@ -1,4 +1,28 @@
 ## CHANGELOG
+
+------------------------------------------------------------------------------------------------------------------
+## [20240326] Victor
+## Engadido
+	- __main__.py  --> main file with StateMachine and all calls integrated
+	- \libs
+		- _EbookTarget.py  --> definicion de clase ebooktarget 		/copiar,renombrar,etc...
+		- _LibraryState.py  --> definicion de clase librarystate	/compara,busca regex, cerciora integegridad...
+		\old
+			-ebook_converter.py, excel_opener.py, struct_chkecing.py, book_finder.py
+
+## Modificado
+    - FLOWCHAR.ODG   --> engadidas clases, estrutura de main definida
+
+## TBD 
+	- Documentar clases
+		- Definir entradas
+		- Definir saídas
+		- Explicativos metodos
+			
+	- Complete program structure
+	- Get a functional version
+	- Prepare Tests
+
 ------------------------------------------------------------------------------------------------------------------
 ## [20240317] Victor
 ## Engadido
@@ -24,8 +48,6 @@
 		
 	- {struct_checking.py}:
 		-aplicar en directorio o arbol de rutas definido por {rexistro_libros.xlsx}
-		
-	
 	
 
 ------------------------------------------------------------------------------------------------------------------
