@@ -2,16 +2,17 @@ import openpyxl
 import string
 
 
-class Library:
-    def __init__(self):#...)  #TBD
+
+class LibraryState:
+    def __init__(self,excelDB_path, folder_path, ):#...)  #TBD
+        self.excelDB = openpyxl.load_workbook(filename = excelDB_path)
+        self.folder_path = folder_path
+       
+        self.status_enum =  ('Unchecked', 'New Books', 'All paired', 'Something Wrong')
+        self.status = self.status_enum[0]
+        
+    def get_folder_tree(self):
         pass
-
-
-
-
-
-
-
 
 
 

@@ -33,7 +33,7 @@ def call_excel_db():
     state_machine["Fail"]
 
 
-state_machine = {    "Obetener estado Lib":      (read_excel(), save_prestate()),
+state_machine = {       "Obetener estado Lib":      (read_excel(), save_prestate()),
                         "Conversion en Masa":       (calibre_convert(), save_prestate()),
                         "Abrir Lib.DB":             (call_excel_db()),  #flux blocked until excel closed
                         "Comparar estados Lib":     (read_excel(), compare_and_get()),
